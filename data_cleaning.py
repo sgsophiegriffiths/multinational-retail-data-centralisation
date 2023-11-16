@@ -1,4 +1,3 @@
-from data_extraction import DataExtractor
 import pandas as pd 
 import re
 

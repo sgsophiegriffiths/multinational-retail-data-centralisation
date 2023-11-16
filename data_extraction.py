@@ -1,10 +1,9 @@
-
-from database_utils import DatabaseConnector
-import pandas as pd 
-import tabula
-import requests
 import boto3
+from database_utils import DatabaseConnector
 from io import StringIO
+import pandas as pd 
+import requests
+import tabula
 
 
 class DataExtractor:

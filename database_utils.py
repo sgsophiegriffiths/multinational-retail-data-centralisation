@@ -1,9 +1,9 @@
-import yaml
-from yaml.loader import SafeLoader
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
-import pandas as pd
- 
+import yaml
+from yaml.loader import SafeLoader
+
+
 """connects to db"""
 class DatabaseConnector:
     """reads db_creds and returns data"""
@@ -41,34 +41,6 @@ class DatabaseConnector:
         DATABASE = 'sales_data'
         PORT = 5432
         engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
-        # connection = self.engine.connect()
-
-        # df = pd.read_csv('database_post_cleaning_11Nov.csv')
+       
         self.df.to_sql(table_name, engine, if_exists='replace', index=False)
-        # try:
-            # Connect to the database
-            # connection = self.engine.connect()
-
-            # Convert DataFrame to SQL table
-        #     dataframe.to_sql(name='dim_users', con=connection, if_exists='replace', index=False)
-
-        #     print(f"Data uploaded successfully to table: {table_name}")
-
-        # except Exception as e:
-        #     print(f"Error uploading data to table {table_name}: {str(e)}")
-
-        # finally:
-        #     # Close the database connection
-        #     connection.close()
-
-# cleaner = DataCleaning()
-# db_connector = DatabaseConnector()
-# db_connector.upload_to_db(cleaner.df, 'dim_users')
-# db_connector.upload_to_db('dim_users')
-# # call class and method
-# db_connector = DatabaseConnector()
-# creds = db_connector.read_db_creds("db_creds.yaml")
-# engine = db_connector.init_db_engine("db_creds.yaml")
-# tables = db_connector.list_db_tables(engine)
-
-
+        
