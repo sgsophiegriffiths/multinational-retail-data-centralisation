@@ -55,7 +55,7 @@ class DataExtractor:
         # self.number_of_stores = self.list_number_of_stores(number_of_stores_endpoint, header_dict)
         number_stores = number_of_stores.get("number_stores")
 
-            # Loop through all store numbers(put in number_stores value instead of typing 451)
+            # Loop through all store numbers
         for store_number in range(1, number_stores):
                 store_url = url.format(store_number=store_number)
                 store_response = requests.get(store_url, headers=header_dict)
@@ -96,24 +96,6 @@ class DataExtractor:
         
     """download and extract json from s3, return pandas df"""
     def extract_json_from_s3(self, url):
-        # # split to get bucket name and object key
-        # s3_parts = s3_address.replace("s3://", "").split("/")
-        # bucket_name = s3_parts[0]
-        # object_key = "/".join(s3_parts[1:])
-        
-        # # Create an S3 client
-        # s3 = boto3.client('s3')
-        
-        # # Download json file from S3
-        # response = s3.get_object(Bucket=bucket_name, Key=object_key)
-        # csv_content = response['Body'].read().decode('utf-8')
-        
-        # # Convert csv to a pandas df
-        # # df_products = pd.read_csv(StringIO(csv_content))
-
-        # #covert json to pandas df
-        # df_products = pd.read_json()
-
         response = requests.get(url)
 
         with open("date_details.json", "wb") as file:
@@ -123,18 +105,5 @@ class DataExtractor:
         
         return df_date
         
-
-
-
-
-
-
-
-# extractor = DataExtractor()
-# pdf_link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
-# df_card_details = extractor.retrieve_pdf_data(pdf_link)
-
-# Display the DataFrame
-# print(df_card_details)
 
 

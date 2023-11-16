@@ -81,7 +81,7 @@ class DataCleaning():
         else:
             return 'Other'
 
-            
+    """call check_phone_number and then drop invalid rows"""       
     def clean_phone_numbers(self, df):
         self.df = df
         self.df['country_to_check'] = self.df['phone_number'].apply(self.check_phone_number)
@@ -192,13 +192,14 @@ class DataCleaning():
         df_products['weight'] = df_products['weight'].apply(convert_weight)
         return df_products
 
-
+    """call all cleaning methods for products"""
     def clean_products_data(self, df_products):
         self.df_products = df_products
         self.df_products = self.clean_date_added(self.df_products)
         self.df_products = self.clean_types(self.df_products)
         return df_products
 
+    """convert date_added to datetime"""
     def clean_date_added(self, df_products):
         self.df_products = df_products
         self.df_products['date_added'] = pd.to_datetime(self.df_products['date_added'], format='mixed', errors='coerce')
@@ -206,6 +207,7 @@ class DataCleaning():
         self.df_products.dropna(inplace = True)
         return self.df_products
 
+    """convert column types"""
     def clean_types(self, df_products):
         self.df_products = df_products
         self.df_products.product_name = self.df_products.product_name.astype('string')
@@ -224,6 +226,7 @@ class DataCleaning():
     # ORDERS HERE #
     # ORDERS HERE #
 
+    """drop not needed columns from df_orders"""
     def clean_orders_data(self, df_orders):
         self.df_orders = df_orders
         self.df_orders = self.df_orders.drop('first_name', axis='columns')
@@ -237,6 +240,7 @@ class DataCleaning():
     # TIME HERE #
     # TIME HERE #
 
+    """clean df_date by changing column types"""
     def clean_date_data(self, df_date):
         self.df_date = df_date
         # Convert the 'timestamp' column to datetime type
@@ -259,24 +263,5 @@ class DataCleaning():
         return self.df_date
 
 
-
-
-# connector = DatabaseConnector()
-# extractor = DataExtractor()
-# #df_card_details = extractor.clean_card_details(df_card_details)
-
-# cleaner = DataCleaning()
-# df_card_details = cleaner.clean_date_of_birth(df_card_details)
-
-
-
-# df = cleaner.clean_index(df)
-# print(df)
-
-# df = cleaner.clean_join_date(df)
-# df = cleaner.clean_country(df)
-# df =  cleaner.clean_country_code(df)
-# df =  cleaner.clean_phone_numbers(df)
-# df = cleaner.clean_user_data(df)
 
 
