@@ -17,7 +17,7 @@ class DataExtractor:
     """uses engine to extract database table and returns pandas dataframe"""
     def read_rds_table(self):
         # SQL query to select data from a table
-        query = f"SELECT * FROM {self.tables[2]}"
+        query = f"SELECT * FROM {self.tables[1]}"
         df = pd.read_sql_query(query, self.db_engine)
         return df
 
@@ -55,12 +55,12 @@ class DataExtractor:
         number_stores = number_of_stores.get("number_stores")
 
             # Loop through all store numbers
-        for store_number in range(1, number_stores):
+        for store_number in range(0, number_stores):
                 store_url = url.format(store_number=store_number)
                 store_response = requests.get(store_url, headers=header_dict)
-
+                print(f'pulled store row no {store_number} out of {number_stores}, store row, status code {store_response.status_code}')
                 if store_response.status_code == 200:
-                    store_data = store_response.json()# ['store_data']
+                    store_data = store_response.json()
                     all_stores_data.append(store_data)
                 else:
                     print(f"Error fetching data for store {store_number}: {store_response.status_code}")

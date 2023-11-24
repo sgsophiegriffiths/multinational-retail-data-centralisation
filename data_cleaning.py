@@ -11,11 +11,12 @@ class DataCleaning():
         self.df = df
         self.df = self.clean_type(self.df)
         self.df = self.clean_index(self.df)
+        self.df.dropna(inplace = True)
         self.df = self.clean_date_of_birth(self.df)
         self.df = self.clean_join_date(self.df)
-        self.df = self.clean_country(self.df)
-        self.df = self.clean_country_code(self.df)
-        self.df = self.clean_phone_numbers(self.df)
+        # self.df = self.clean_country(self.df)
+        # self.df = self.clean_country_code(self.df)
+        # self.df = self.clean_phone_numbers(self.df)
         return self.df
 
     """Changes types"""
@@ -99,6 +100,10 @@ class DataCleaning():
     def clean_card_data(self, df_card_details):
         self.df_card_details = df_card_details
         self.df_card_details.dropna(inplace = True)
+        self.df_card_details.card_number = self.df_card_details.card_number.astype('string')
+        # self.df_card_details.replace({"card_number": "?4971858637664481"}, {"card_number": "4971858637664481"}, inplace=True)
+        # self.df_card_details.replace({"card_number": "???3554954842403828"}, {"card_number": "3554954842403828"}, inplace=True)
+        self.df_card_details['card_number'] = self.df_card_details['card_number'].str.replace('?', '')
         return self.df_card_details
 
     """change date_payment_confirmed to datetime"""
@@ -119,7 +124,7 @@ class DataCleaning():
         self.df_store_data = self.clean_opening_date(self.df_store_data)
         self.df_store_data = self.clean_continent(self.df_store_data)
         self.df_store_data = self.clean_lat(self.df_store_data)
-        self.df_store_data = self.clean_types_stores(self.df_store_data)
+        # self.df_store_data = self.clean_types_stores(self.df_store_data)
         return self.df_store_data 
 
     """change opening_date to datetime"""
@@ -145,15 +150,15 @@ class DataCleaning():
     """change types and drop index"""
     def clean_types_stores(self, df_store_data):
         self.df_store_data = df_store_data
-        self.df_store_data.longitude = pd.to_numeric(self.df_store_data.longitude, errors='coerce')
-        self.df_store_data.latitude = pd.to_numeric(self.df_store_data.latitude, errors='coerce')
-        self.df_store_data.address = self.df_store_data.address.astype('string')
+        # self.df_store_data.longitude = pd.to_numeric(self.df_store_data.longitude, errors='coerce')
+        # self.df_store_data.latitude = pd.to_numeric(self.df_store_data.latitude, errors='coerce')
+        # self.df_store_data.address = self.df_store_data.address.astype('string')
         self.df_store_data.staff_numbers = pd.to_numeric(self.df_store_data.staff_numbers, errors='coerce')
         self.df_store_data.dropna(subset=['staff_numbers'], inplace = True)
-        self.df_store_data.locality = self.df_store_data.locality.astype('string')
-        self.df_store_data = self.df_store_data.drop(['index'], axis=1)
-        self.df_store_data = self.df_store_data.drop(['Unnamed: 0'], axis=1)
-        self.df_store_data = self.df_store_data.reset_index(drop=True)
+        # self.df_store_data.locality = self.df_store_data.locality.astype('string')
+        # self.df_store_data = self.df_store_data.drop(['index'], axis=1)
+        # self.df_store_data = self.df_store_data.drop(['Unnamed: 0'], axis=1)
+        # self.df_store_data = self.df_store_data.reset_index(drop=True)
         return self.df_store_data
     
 
@@ -194,8 +199,8 @@ class DataCleaning():
     """call all cleaning methods for products"""
     def clean_products_data(self, df_products):
         self.df_products = df_products
-        self.df_products = self.clean_date_added(self.df_products)
-        self.df_products = self.clean_types(self.df_products)
+        # self.df_products = self.clean_date_added(self.df_products)
+        #self.df_products = self.clean_types(self.df_products)
         return df_products
 
     """convert date_added to datetime"""
@@ -215,7 +220,8 @@ class DataCleaning():
         self.df_products.uuid = self.df_products.uuid.astype('string')
         self.df_products.EAN = self.df_products.EAN.astype('string')
         self.df_products.product_code = self.df_products.product_code.astype('string')
-        self.df_products['product_price'] = self.df_products['product_price'].str.replace('£', '').astype(float)
+        # self.df_products['product_price'] = self.df_products['product_price'].str.replace('£', '').astype('float', errors='coerce')
+        #self.df_products['product_price'] = pd.to_numeric(self.df_products['product_price'].str.replace('£', ''), errors='coerce').astype('float')
         self.df_products.dropna(inplace = True)
         self.df_products = self.df_products.reset_index(drop=True)
         self.df_products = self.df_products.drop('Unnamed: 0', axis='columns')
