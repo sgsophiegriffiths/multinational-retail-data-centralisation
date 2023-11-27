@@ -1,7 +1,7 @@
 import pandas as pd 
 import re
 
-
+"""cleans the data, dropping NaN values and replacing some incorrectly types values"""
 class DataCleaning():
     def __init__(self):
         pass
@@ -22,7 +22,6 @@ class DataCleaning():
     """Changes types"""
     def clean_type(self, df):
         self.df = df
-        # change type
         self.df.first_name = self.df.first_name.astype('string')
         self.df.last_name = self.df.last_name.astype('string')
         self.df.email_address = self.df.email_address.astype('string')
@@ -33,8 +32,7 @@ class DataCleaning():
 
     """drops incorrect index column"""
     def clean_index(self, df):
-        self.df = df
-        # drop index column  
+        self.df = df  
         self.df = self.df.drop(columns=['index'])
         return self.df
     
@@ -96,14 +94,13 @@ class DataCleaning():
     # CARD HERE #
     # CARD HERE #
 
-    """drop NaN"""
+    """drop NaN and call date_payment_confirmed"""
     def clean_card_data(self, df_card_details):
         self.df_card_details = df_card_details
         self.df_card_details.dropna(inplace = True)
         self.df_card_details.card_number = self.df_card_details.card_number.astype('string')
-        # self.df_card_details.replace({"card_number": "?4971858637664481"}, {"card_number": "4971858637664481"}, inplace=True)
-        # self.df_card_details.replace({"card_number": "???3554954842403828"}, {"card_number": "3554954842403828"}, inplace=True)
         self.df_card_details['card_number'] = self.df_card_details['card_number'].str.replace('?', '')
+        self.df_card_details = self.clean_date_payment_confirmed(self.df_card_details)
         return self.df_card_details
 
     """change date_payment_confirmed to datetime"""
@@ -150,15 +147,15 @@ class DataCleaning():
     """change types and drop index"""
     def clean_types_stores(self, df_store_data):
         self.df_store_data = df_store_data
-        # self.df_store_data.longitude = pd.to_numeric(self.df_store_data.longitude, errors='coerce')
-        # self.df_store_data.latitude = pd.to_numeric(self.df_store_data.latitude, errors='coerce')
-        # self.df_store_data.address = self.df_store_data.address.astype('string')
+        self.df_store_data.longitude = pd.to_numeric(self.df_store_data.longitude, errors='coerce')
+        self.df_store_data.latitude = pd.to_numeric(self.df_store_data.latitude, errors='coerce')
+        self.df_store_data.address = self.df_store_data.address.astype('string')
         self.df_store_data.staff_numbers = pd.to_numeric(self.df_store_data.staff_numbers, errors='coerce')
         self.df_store_data.dropna(subset=['staff_numbers'], inplace = True)
-        # self.df_store_data.locality = self.df_store_data.locality.astype('string')
-        # self.df_store_data = self.df_store_data.drop(['index'], axis=1)
-        # self.df_store_data = self.df_store_data.drop(['Unnamed: 0'], axis=1)
-        # self.df_store_data = self.df_store_data.reset_index(drop=True)
+        self.df_store_data.locality = self.df_store_data.locality.astype('string')
+        self.df_store_data = self.df_store_data.drop(['index'], axis=1)
+        self.df_store_data = self.df_store_data.drop(['Unnamed: 0'], axis=1)
+        self.df_store_data = self.df_store_data.reset_index(drop=True)
         return self.df_store_data
     
 
@@ -169,7 +166,6 @@ class DataCleaning():
     """convert all product weights to kg"""
     def convert_product_weights(self, df_products):
         self.df_products = df_products
-        # df_cleaned = self.df_products.copy()
         
         # Function to clean and convert weights
         def convert_weight(weight):
@@ -200,7 +196,7 @@ class DataCleaning():
     def clean_products_data(self, df_products):
         self.df_products = df_products
         # self.df_products = self.clean_date_added(self.df_products)
-        #self.df_products = self.clean_types(self.df_products)
+        # self.df_products = self.clean_types(self.df_products)
         return df_products
 
     """convert date_added to datetime"""
@@ -220,8 +216,7 @@ class DataCleaning():
         self.df_products.uuid = self.df_products.uuid.astype('string')
         self.df_products.EAN = self.df_products.EAN.astype('string')
         self.df_products.product_code = self.df_products.product_code.astype('string')
-        # self.df_products['product_price'] = self.df_products['product_price'].str.replace('£', '').astype('float', errors='coerce')
-        #self.df_products['product_price'] = pd.to_numeric(self.df_products['product_price'].str.replace('£', ''), errors='coerce').astype('float')
+        self.df_products['product_price'] = pd.to_numeric(self.df_products['product_price'].str.replace('£', ''), errors='coerce').astype('float')
         self.df_products.dropna(inplace = True)
         self.df_products = self.df_products.reset_index(drop=True)
         self.df_products = self.df_products.drop('Unnamed: 0', axis='columns')
