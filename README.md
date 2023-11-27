@@ -18,9 +18,16 @@ pip install pandas re boto3 stringI0 requests tabula sqlalchemy yaml
 
 Usage instructions <br />
 To extract data: Use methods from the DataExtractor class in data_extraction.py <br />
-For data cleaning: Use methods from the DataCleaning class in data_cleaning.py <br />
+To clean data: Use methods from the DataCleaning class in data_cleaning.py <br />
 To upload data to the database: Use methods from the DatabaseConnector class in database_utils.py <br />
 
 
 File structure of the project <br />
+```
+├───.gitignore
+├───README.md
+├───data_cleaning.py
+├───data_extraction.py
+├───database_utils.py
+```
 
