@@ -35,10 +35,10 @@ class DatabaseConnector:
 
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
-        HOST = 'my-first-rds-db.cqlhb8lnh8vd.eu-north-1.rds.amazonaws.com'
-        USER = 'postgres_un_Soph'
-        PASSWORD = 'Psg93671!'
-        DATABASE = 'sales_data'
+        HOST = 'host' # replace with your host
+        USER = 'username' # replace with your pgadmin database username
+        PASSWORD = 'password' # replace with your pgadmin database password 
+        DATABASE = 'name' # replace with your database name on pgadmin
         PORT = 5432
         engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
        
