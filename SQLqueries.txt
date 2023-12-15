@@ -1,0 +1,126 @@
+TASK 1
+
+SELECT COUNT(country_code) AS total_no_stores,
+country_code
+FROM dim_store_details
+GROUP BY country_code
+ORDER BY total_no_stores DESC;
+
+TASK 2 
+
+SELECT COUNT(locality) AS total_no_stores,
+locality
+FROM dim_store_details
+GROUP BY locality
+ORDER BY total_no_stores DESC;
+
+TASK 3
+
+SELECT 
+SUM(dim_products.product_price * orders_table.product_quantity) AS total_sales,
+    dim_date_times.month
+from orders_table
+JOIN dim_date_times on dim_date_times.date_uuid = orders_table.date_uuid
+JOIN dim_products on dim_products.product_code = orders_table.product_code
+GROUP BY dim_date_times.month
+ORDER BY total_sales DESC;
+
+TASK 4
+
+SELECT
+  SUM(CASE WHEN store_code = 'WEB-1388012W' THEN 1 ELSE 0 END) AS orders_online,
+  SUM(CASE WHEN store_code <> 'WEB-1388012W' THEN 1 ELSE 0 END) AS orders_offline
+FROM orders_table;
+
+SELECT
+SUM(product_quantity)
+FROM orders_table
+WHERE store_code <> 'WEB-1388012W';
+
+TASK 5
+
+SELECT
+  dim_store_details.store_type,
+  CAST(SUM(orders_table.product_quantity * dim_products.product_price) AS NUMERIC(10, 2)) as total_sales,
+  CAST((SUM(orders_table.product_quantity * dim_products.product_price) / total_revenue.total) * 100 AS NUMERIC(10, 2)) as percentage_of_total
+FROM
+  orders_table
+JOIN dim_products ON dim_products.product_code = orders_table.product_code
+JOIN dim_store_details ON dim_store_details.store_code = orders_table.store_code
+CROSS JOIN (
+  SELECT SUM(orders_table.product_quantity * dim_products.product_price) as total
+  FROM orders_table
+  JOIN dim_products ON dim_products.product_code = orders_table.product_code
+  JOIN dim_store_details ON dim_store_details.store_code = orders_table.store_code
+) AS total_revenue
+GROUP BY dim_store_details.store_type, total_revenue.total
+ORDER BY total_sales DESC;
+
+TASK 6
+
+SELECT
+  dim_date_times.month,
+  dim_date_times.year,
+   CAST(SUM(orders_table.product_quantity * dim_products.product_price) AS NUMERIC(10, 2)) as total_sales
+FROM
+  orders_table
+JOIN dim_date_times ON dim_date_times.date_uuid = orders_table.date_uuid
+JOIN dim_products ON dim_products.product_code = orders_table.product_code
+
+GROUP BY dim_date_times.year, dim_date_times.month
+ORDER BY total_sales DESC;
+
+TASK 7 
+
+SELECT 
+SUM(staff_numbers) as total_staff_numbers,
+country_code
+from dim_store_details
+
+GROUP BY country_code
+ORDER BY total_staff_numbers DESC;
+
+TASK 8
+
+SELECT 
+SUM(dim_products.product_price * orders_table.product_quantity) AS total_sales,
+dim_store_details.store_type
+
+from orders_table
+JOIN dim_store_details on orders_table.store_code = dim_store_details.store_code
+JOIN dim_products on dim_products.product_code = orders_table.product_code
+WHERE dim_store_details.country_code = 'DE'
+GROUP BY dim_store_details.store_type
+ORDER BY total_sales;
+
+TASK 9
+
+  SELECT
+  year,
+  CONCAT(
+    '{"hours": ',
+    ROUND(AVG(EXTRACT(HOUR FROM actual_time_taken))),
+    ', "minutes": ',
+    ROUND(AVG(EXTRACT(MINUTE FROM actual_time_taken))),
+    ', "seconds": ',
+    ROUND(AVG(EXTRACT(SECOND FROM actual_time_taken))),
+    ', "milliseconds": ',
+    ROUND(AVG(EXTRACT(MICROSECOND FROM actual_time_taken) / 1000)),
+    '}'
+  ) AS actual_time_taken
+FROM (
+  SELECT
+    year,
+    (LEAD(CAST(CONCAT_WS(' ', year, month, day, time) AS TIMESTAMP)) OVER (ORDER BY year, month, day, time) -
+     CAST(CONCAT_WS(' ', year, month, day, time) AS TIMESTAMP)) AS actual_time_taken
+  FROM
+    dim_date_times
+) AS time_diff
+GROUP BY
+  year
+ORDER BY
+  actual_time_taken DESC;
+
+
+
+ 

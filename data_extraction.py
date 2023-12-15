@@ -7,6 +7,7 @@ import tabula
 
 
 class DataExtractor:
+    """extracts data from various sources"""
     def __init__(self):
         self.connector = DatabaseConnector()
         self.db_engine = self.connector.init_db_engine("db_creds.yaml")
@@ -14,15 +15,15 @@ class DataExtractor:
         self.s3_client = boto3.client('s3')
         
 
-    """uses engine to extract database table and returns pandas dataframe"""
     def read_rds_table(self):
+        """uses engine to extract database table and returns pandas dataframe"""
         # SQL query to select data from a table
         query = f"SELECT * FROM {self.tables[1]}"
         df = pd.read_sql_query(query, self.db_engine)
         return df
 
-    """take link and return pandas df"""
     def retrieve_pdf_data(self, pdf_link):
+        """take link and return pandas df"""
         # Use tabula to extract tables from the PDF
         tables = tabula.read_pdf(pdf_link, pages='all', multiple_tables=True)
 
@@ -30,8 +31,8 @@ class DataExtractor:
         df_card_details = pd.concat(tables, ignore_index=True)
         return df_card_details
 
-    """lists number of stores from the API"""
     def list_number_of_stores(self, number_of_stores_endpoint, header_dict):
+        """lists number of stores from the API"""
         base_url = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/'
         url = base_url + number_of_stores_endpoint
         response = requests.get(url, headers=header_dict)
@@ -43,8 +44,8 @@ class DataExtractor:
             print(f"Error: {response.status_code}")
             return None
     
-    """take the store_endpoint as an argument and extract all the stores from the API saving them in a pandas DataFrame"""
     def retrieve_stores_data(self, number_of_stores, store_endpoint, header_dict):
+        """take the store_endpoint as an argument and extract all the stores from the API saving them in a pandas DataFrame"""
         base_url = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/'
         url = base_url + store_endpoint
         # response = requests.get(url, headers=header_dict)
@@ -73,8 +74,8 @@ class DataExtractor:
                 print("No store data found.")
                 return None
         
-    """download and extract csv from s3, return pandas df"""
     def extract_from_s3(self, s3_address):
+        """download and extract csv from s3, return pandas df"""
         # split to get bucket name and object key
         s3_parts = s3_address.replace("s3://", "").split("/")
         bucket_name = s3_parts[0]
@@ -92,9 +93,8 @@ class DataExtractor:
         
         return df_products
 
-        
-    """download and extract json from s3, return pandas df"""
     def extract_json_from_s3(self, url):
+        """download and extract json from s3, return pandas df"""
         response = requests.get(url)
 
         with open("date_details.json", "wb") as file:
