@@ -40,5 +40,5 @@ In Milestone 2, I established the sales_database, developed Python scripts for d
 
 In Milestone 3, I ensured accurate columns and data types in sales_database tables. I added primary keys to dimension tables and established foreign keys in the orders_table, completing a star-based database schema using SQL. <br />
 
-In Milestone 4, I utilized SQL to query the sales_database, addressing crucial business questions. These included store distribution, peak sales months, online sales, store type contribution, highest sales months, staff headcount, top-performing German store type, and sales velocity. <br />
+In Milestone 4, I utilized SQL to query the sales_database, addressing crucial business questions. These included store distribution, peak sales months, online sales, store type contribution, highest sales months, staff headcount, top-performing German store type, and sales velocity. You can find these queries in SQLqueries.txt <br />
 
