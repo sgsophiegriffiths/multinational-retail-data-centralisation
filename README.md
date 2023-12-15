@@ -30,6 +30,7 @@ To upload data to the database: Use methods from the DatabaseConnector class in 
 ├───data_cleaning.py
 ├───data_extraction.py
 ├───database_utils.py
+└───SQLqueries.txt
 ```
 
 ### Project Description <br />
